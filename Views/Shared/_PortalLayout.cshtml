@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Sindh Bank HR Portal</title>
+    <link rel="stylesheet" href="~/css/portal.css" asp-append-version="true" />
+</head>
+<body class="portal-body">
+    <header class="portal-header">
+        <img src="~/images/logo.png" alt="Sindh Bank" class="portal-logo" />
+        <div class="portal-header-text">
+            <h1>HR Portal</h1>
+            <p>Career Form Management</p>
+        </div>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <form asp-controller="Account" asp-action="Logout" method="post" class="portal-logout-form">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="portal-logout-btn">Logout</button>
+            </form>
+        }
+    </header>
+
+    <main class="portal-main">
+        @RenderBody()
+    </main>
+
+    <footer class="portal-footer">
+        <p>&copy; @DateTime.Now.Year Sindh Bank Limited</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,209 @@
+:root {
+    --cf-green: #2f7a4d;
+    --cf-green-dark: #1f4d36;
+    --cf-text: #23302a;
+    --cf-text-muted: #5c6b63;
+    --cf-border: #dcdcdc;
+    --cf-white: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body.cf-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: var(--cf-text);
+    background-image: url('/images/ajrak.jpg');
+    background-repeat: repeat;
+    background-size: 340px auto;
+    padding: 2rem 1rem;
+}
+
+.cf-page {
+    display: flex;
+    justify-content: center;
+}
+
+.cf-card {
+    background: var(--cf-white);
+    max-width: 960px;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+}
+
+.cf-banner {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.cf-form {
+    padding: 2rem 2.5rem 2.5rem;
+}
+
+.cf-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.cf-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.25rem;
+}
+
+.cf-row .cf-field {
+    margin-bottom: 0;
+}
+
+.cf-full {
+    grid-column: 1 / -1;
+}
+
+.cf-field label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--cf-text);
+    margin-bottom: 0.4rem;
+}
+
+.cf-field input[type="text"],
+.cf-field input[type="email"],
+.cf-field input[type="tel"],
+.cf-field input[type="number"],
+.cf-field input[type="file"],
+.cf-field select,
+.cf-field textarea {
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--cf-border);
+    border-radius: 4px;
+    font-size: 0.92rem;
+    font-family: inherit;
+    background: var(--cf-white);
+    width: 100%;
+}
+
+.cf-field textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+    .cf-field input:focus,
+    .cf-field select:focus,
+    .cf-field textarea:focus {
+        outline: 2px solid var(--cf-green);
+        outline-offset: 1px;
+    }
+
+.cf-dob-group {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.cf-hint {
+    font-size: 0.72rem;
+    color: var(--cf-text-muted);
+    margin-top: 0.3rem;
+}
+
+.cf-submit-row {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.cf-form button[type="submit"] {
+    background: var(--cf-green);
+    color: var(--cf-white);
+    border: none;
+    border-radius: 4px;
+    padding: 0.75rem 3rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+    .cf-form button[type="submit"]:hover {
+        background: var(--cf-green-dark);
+    }
+
+.cf-note {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--cf-text-muted);
+    font-style: italic;
+}
+
+.cf-confirmation {
+    padding: 3rem 2.5rem;
+    text-align: center;
+}
+
+    .cf-confirmation h2 {
+        color: var(--cf-green-dark);
+        margin: 0 0 0.75rem;
+    }
+
+.cf-reference {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--cf-green);
+    margin: 0.5rem 0 1.5rem;
+    letter-spacing: 0.03em;
+}
+
+.cf-confirmation-note {
+    color: var(--cf-text-muted);
+    font-size: 0.9rem;
+}
+
+.cf-error {
+    background: #fdecea;
+    color: var(--sb-status-rejected);
+    border: 1px solid #f4c7c3;
+    border-radius: 4px;
+    padding: 0.65rem 1rem;
+    font-size: 0.85rem;
+    margin-bottom: 1.25rem;
+    grid-column: 1 / -1;
+}
+
+/* Disability details — slide open/closed */
+.cf-slide-wrapper {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+    .cf-slide-wrapper.cf-slide-open {
+        max-height: 300px;
+    }
+
+/* Submit button — clearly grayed out while disabled */
+.cf-form button[type="submit"]:disabled {
+    background: #cfd6d2;
+    color: #8a938e;
+    cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+    .cf-row {
+        grid-template-columns: 1fr;
+    }
+
+    .cf-dob-group {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .cf-form {
+        padding: 1.5rem 1.25rem 2rem;
+    }
+}

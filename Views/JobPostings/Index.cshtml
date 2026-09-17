@@ -1,0 +1,127 @@
+﻿@model JobPostingsPageViewModel
+@{
+    ViewData["Title"] = "Manage Job Postings";
+    Layout = "_PortalLayout";
+}
+
+<div class="portal-card portal-postings-card">
+    <h2>Manage Job Postings</h2>
+    <p class="portal-subtitle">These postings control what shows on the public career form.</p>
+
+    @if (TempData["JobPostingError"] is string error)
+    {
+        <div class="portal-error">@error</div>
+    }
+
+    <div class="portal-download-method">
+        <h3>Add a New Posting</h3>
+        <form asp-controller="JobPostings" asp-action="Create" method="post" class="portal-inline-form">
+            @Html.AntiForgeryToken()
+            <div class="portal-field">
+                <label for="Position">Position</label>
+                <input type="text" id="Position" name="Position" placeholder="e.g. IT Officer" />
+            </div>
+            <div class="portal-field">
+                <label for="Location">Location</label>
+                <input type="text" id="Location" name="Location" placeholder="e.g. Karachi" />
+            </div>
+            <div class="portal-field">
+                <label for="StartDate">Start Date</label>
+                <input type="date" id="StartDate" name="StartDate" />
+            </div>
+            <div class="portal-field">
+                <label for="EndDate">End Date</label>
+                <input type="date" id="EndDate" name="EndDate" />
+            </div>
+            <button type="submit">Add Posting</button>
+        </form>
+    </div>
+
+    <div class="portal-results">
+
+        <!-- Open/Closed tab switcher — links back to the same page with a
+     ?view= query string; the controller reads it and filters the list -->
+        <div class="portal-postings-tabs">
+            <a asp-controller="JobPostings" asp-action="Index" asp-route-view="open"
+               class="portal-tab-link @(Model.ViewMode == "open" ? "portal-tab-active" : "")">Open</a>
+            <a asp-controller="JobPostings" asp-action="Index" asp-route-view="closed"
+               class="portal-tab-link @(Model.ViewMode == "closed" ? "portal-tab-active" : "")">Closed</a>
+        </div>
+
+        @if (Model.Postings.Count == 0)
+        {
+            <p class="portal-empty">No job postings yet — add one above.</p>
+        }
+        else
+        {
+            <div class="portal-table-wrap">
+                <table class="portal-table">
+                    <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>Location</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var posting in Model.Postings)
+                        {
+                            <tr>
+                                <td>@posting.Position</td>
+                                <td>@posting.Location</td>
+                                <td>@posting.StartDate.ToString("dd MMM yyyy")</td>
+                                <td>@posting.EndDate.ToString("dd MMM yyyy")</td>
+                                <td>
+                                    <!-- Only two states shown to HR now — the internal reason
+                                     (manually deactivated vs date expired) is no longer exposed,
+                                        since it's not something HR needs to think about. -->
+                                    @if (posting.IsCurrentlyOpen)
+                                    {
+                                        <span class="portal-badge portal-badge-open">Open</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="portal-badge portal-badge-closed">Closed</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (posting.IsCurrentlyOpen)
+                                    {
+                                        <!-- Open posting: HR can always close it -->
+                                        <form asp-controller="JobPostings" asp-action="Deactivate" method="post" class="portal-toggle-form">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="jobPostingId" value="@posting.JobPostingId" />
+                                            <button type="submit" class="portal-toggle-btn">Close</button>
+                                        </form>
+                                    }
+                                    else if (posting.CanReopen)
+                                    {
+                                        <!-- Closed, but end date hasn't passed yet — Reopen will
+                                        genuinely bring it back to Open, so we show the button -->
+                                        <form asp-controller="JobPostings" asp-action="Activate" method="post" class="portal-toggle-form">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="jobPostingId" value="@posting.JobPostingId" />
+                                            <button type="submit" class="portal-toggle-btn">Reopen</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <!-- Fully expired — reopening wouldn't do anything visible
+                                           until the end date is extended (not supported yet), so
+                                               no button is offered, just a plain label -->
+                                        <span class="portal-muted">Expired</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+
+    <a asp-controller="Dashboard" asp-action="Index" class="portal-back-link">&larr; Back to Dashboard</a>
+</div>

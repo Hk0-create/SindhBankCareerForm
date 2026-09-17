@@ -1,0 +1,97 @@
+﻿@{
+    ViewData["Title"] = "Download CV's";
+    Layout = "_PortalLayout";
+}
+
+<div class="portal-card portal-download-card">
+    <h2>Download CV's (Bulk)</h2>
+    <p class="portal-subtitle">Choose one of the three methods below. Each downloads a zip file of matching CVs.</p>
+
+    @if (TempData["DownloadError"] is string error)
+    {
+        <div class="portal-error">@error</div>
+    }
+    <!-- Radio buttons let HR pick exactly one download method at a time.
+     Only the matching section below is shown — JS toggles the display. -->
+    <div class="portal-download-selector">
+        <label class="portal-radio-option">
+            <input type="radio" name="downloadMethod" value="range" checked />
+            By Application Number Range
+        </label>
+        <label class="portal-radio-option">
+            <input type="radio" name="downloadMethod" value="list" />
+            By Comma-Separated Application Numbers
+        </label>
+        <label class="portal-radio-option">
+            <input type="radio" name="downloadMethod" value="position" />
+            By Position and Date Range
+        </label>
+    </div>
+
+    <div class="portal-download-methods">
+        <div class="portal-download-method" data-method="range">
+            <form asp-controller="Download" asp-action="ByRange" method="post" class="portal-inline-form">
+                @Html.AntiForgeryToken()
+                <div class="portal-field">
+                    <label for="fromNumber">From</label>
+                    <input type="text" id="fromNumber" name="fromNumber" placeholder="SB-0000001" />
+                </div>
+                <div class="portal-field">
+                    <label for="toNumber">To</label>
+                    <input type="text" id="toNumber" name="toNumber" placeholder="SB-0000010" />
+                </div>
+                <button type="submit">Download Zip</button>
+            </form>
+        </div>
+
+        <div class="portal-download-method" data-method="list" style="display:none;">
+            <form asp-controller="Download" asp-action="ByList" method="post" class="portal-inline-form">
+                @Html.AntiForgeryToken()
+                <div class="portal-field portal-field-wide">
+                    <label for="numbersCsv">Application Numbers</label>
+                    <input type="text" id="numbersCsv" name="numbersCsv" placeholder="SB-0000001, SB-0000008, SB-0000010" />
+                </div>
+                <button type="submit">Download Zip</button>
+            </form>
+        </div>
+
+        <div class="portal-download-method" data-method="position" style="display:none";>
+            <form asp-controller="Download" asp-action="ByPositionAndDate" method="post" class="portal-inline-form">
+                @Html.AntiForgeryToken()
+                <div class="portal-field">
+                    <label for="positionAppliedFor">Position</label>
+                    <select id="positionAppliedFor" name="positionAppliedFor">
+                        <option value="">Select Position</option>
+                        @foreach (var position in (List<string>)(ViewData["AvailablePositions"] ?? new List<string>()))
+                        {
+                            <option>@position</option>
+                        }
+                    </select>
+                </div>
+                <div class="portal-field">
+                    <label for="dateFrom">From Date</label>
+                    <input type="date" id="dateFrom" name="dateFrom" />
+                </div>
+                <div class="portal-field">
+                    <label for="dateTo">To Date</label>
+                    <input type="date" id="dateTo" name="dateTo" />
+                </div>
+                <button type="submit">Download Zip</button>
+            </form>
+        </div>
+    </div>
+
+    <a asp-controller="Dashboard" asp-action="Index" class="portal-back-link">&larr; Back to Dashboard</a>
+
+    <script>
+            // Show only the download-form section whose data-method matches
+            // the currently selected radio button. All other sections hide.
+            document.querySelectorAll('input[name="downloadMethod"]').forEach(function (radio) {
+                radio.addEventListener('change', function () {
+                    document.querySelectorAll('.portal-download-method').forEach(function (section) {
+                        section.style.display = (section.getAttribute('data-method') === radio.value) ? 'block' : 'none';
+                    });
+                });
+            });
+    </script>
+</div>

@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_PortalLayout";
+}
+
+<div class="portal-card portal-dashboard-card">
+    <h2>Welcome, @User.Identity?.Name</h2>
+    <p class="portal-subtitle">Choose an action to get started.</p>
+
+    <div class="dashboard-actions">
+        <a asp-controller="Search" asp-action="Index" class="dashboard-action-btn">
+            <span class="dashboard-action-icon">&#128269;</span>
+            <span class="dashboard-action-label">Search CV's</span>
+            <span class="dashboard-action-desc">Find applicants using filters</span>
+        </a>
+
+        <a asp-controller="Download" asp-action="Index" class="dashboard-action-btn">
+            <span class="dashboard-action-icon">&#8681;</span>
+            <span class="dashboard-action-label">Download CV's</span>
+            <span class="dashboard-action-desc">Bulk download as a zip file</span>
+        </a>
+
+        <a asp-controller="JobPostings" asp-action="Index" class="dashboard-action-btn">
+            <span class="dashboard-action-icon">&#128203;</span>
+            <span class="dashboard-action-label">Manage Job Postings</span>
+            <span class="dashboard-action-desc">Control what shows on the career form</span>
+        </a>
+    </div>
+</div>

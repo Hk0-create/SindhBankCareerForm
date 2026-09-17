@@ -1,0 +1,412 @@
+﻿@model CareerFormViewModel
+@{
+    ViewData["Title"] = "Career Form";
+    var currentYear = DateTime.Now.Year;
+}
+
+<div class="cf-page">
+    <div class="cf-card">
+        <img src="~/images/CARRER_form.jpg" alt="Sindh Bank Career Form" class="cf-banner" />
+
+        @if (Model.IsSubmitted)
+        {
+            <div class="cf-confirmation">
+                <h2>Application Submitted</h2>
+                <p>Thank you for applying. Your reference number is:</p>
+                <p class="cf-reference">@Model.ReferenceNumber</p>
+                <p class="cf-confirmation-note">After submission of the above form, a confirmation email will be received by the applicant informing the application reference number.</p>
+            </div>
+        }
+        else
+        {
+            <form asp-controller="Career" asp-action="Index" method="post" enctype="multipart/form-data" class="cf-form" id="careerForm">
+                @Html.AntiForgeryToken()
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="cf-error">@Html.ValidationSummary(false)</div>
+                }
+
+                <div class="cf-field cf-full">
+                    <label for="PositionAppliedFor">Position Applied For</label>
+                    <select id="PositionAppliedFor" name="PositionAppliedFor" required data-selected="@Model.PositionAppliedFor">
+                        <option value="">Loading positions...</option>
+                    </select>
+                </div>
+
+                <div class="cf-field cf-full">
+                    <label for="JobLocation">Job Location</label>
+                    <select id="JobLocation" name="JobLocation" required data-selected="@Model.JobLocation">
+                        <option value="">Select a position first</option>
+                    </select>
+                </div>
+
+                <div class="cf-row">
+                    <div class="cf-field">
+                        <label for="Name">Name</label>
+                        <input type="text" id="Name" name="Name" value="@Model.Name" placeholder="First name" required />
+                    </div>
+                    <div class="cf-field">
+                        <label for="CnicNo">CNIC No</label>
+                        <input type="text" id="CnicNo" name="CnicNo" value="@Model.CnicNo" placeholder="Example xxxxx-xxxxxxx-x" required />
+                    </div>
+                </div>
+
+                <div class="cf-row">
+                    <div class="cf-field">
+                        <label>Date of Birth</label>
+                        <div class="cf-dob-group">
+                            <select name="DobYear" aria-label="Year" required>
+                                @for (var y = currentYear - 18; y >= 1950; y--)
+                                {
+                                    <option value="@y">@y</option>
+                                }
+                            </select>
+                            <select name="DobMonth" aria-label="Month" required>
+                                @for (var m = 1; m <= 12; m++)
+                                {
+                                    <option value="@m.ToString("00")">@m.ToString("00")</option>
+                                }
+                            </select>
+                            <select name="DobDay" aria-label="Day" required>
+                                @for (var d = 1; d <= 31; d++)
+                                {
+                                    <option value="@d.ToString("00")">@d.ToString("00")</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="cf-field">
+                        <label for="Gender">Gender</label>
+                        <select id="Gender" name="Gender" required>
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="cf-row">
+                    <div class="cf-field">
+                        <label for="CityOfResidence">City of Residence</label>
+                        <select id="CityOfResidence" name="CityOfResidence" required>
+                            <option>Karachi</option>
+                            <option>Hyderabad</option>
+                            <option>Sukkur</option>
+                            <option>Larkana</option>
+                            <option>Lahore</option>
+                            <option>Islamabad</option>
+                            <option>Quetta</option>
+                            <option>Peshawar</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="cf-field">
+                        <label for="Domicile">Domicile</label>
+                        <select id="Domicile" name="Domicile" required>
+                            <option value="">Select Domicile</option>
+                            <option>Sindh</option>
+                            <option>Punjab</option>
+                            <option>Balochistan</option>
+                            <option>Khyber Pakhtunkhwa</option>
+                            <option>Islamabad Capital Territory</option>
+                            <option>Gilgit-Baltistan</option>
+                            <option>Azad Jammu &amp; Kashmir</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="cf-row">
+                    <div class="cf-field">
+                        <label for="MobileNumber">Mobile Number</label>
+                        <input type="text" id="MobileNumber" name="MobileNumber" value="@Model.MobileNumber" placeholder="Example 03xxxxxxxxx" required />
+                    </div>
+                    <div class="cf-field">
+                        <label for="ResidenceNumber">Residence Number</label>
+                        <input type="text" id="ResidenceNumber" name="ResidenceNumber" value="@Model.ResidenceNumber" placeholder="Example xxxxxxxxxx" required />
+                    </div>
+                </div>
+
+                <div class="cf-row">
+                    <div class="cf-field">
+                        <label for="Email">Email</label>
+                        <input type="email" id="Email" name="Email" value="@Model.Email" placeholder="Example@abc.com" required />
+                    </div>
+                    <div class="cf-field">
+                        <label for="CvFile">C.V upload in Docx and PDF Format</label>
+                        <input type="file" id="CvFile" name="CvFile" accept=".doc,.docx,.pdf" required />
+                    </div>
+                </div>
+
+                <div class="cf-row">
+                    <div class="cf-field">
+                        <label for="Address">Address</label>
+                        <input type="text" id="Address" name="Address" value="@Model.Address" placeholder="Full Address" required />
+                    </div>
+                    <div class="cf-field">
+                        <label for="Religion">Religion</label>
+                        <select id="Religion" name="Religion" required>
+                            <option value="">Select Religion</option>
+                            <option>Islam</option>
+                            <option>Christianity</option>
+                            <option>Hinduism</option>
+                            <option>Sikhism</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="cf-row">
+                    <div class="cf-field">
+                        <label for="SecondaryEducation">Secondary Education</label>
+                        <select id="SecondaryEducation" name="SecondaryEducation" required>
+                            <option value="">Select Qualification</option>
+                            <option>A Grade / 1st Division</option>
+                            <option>B Grade / 2nd Division</option>
+                            <option>C Grade / 3rd Division</option>
+                        </select>
+                    </div>
+                    <div class="cf-field">
+                        <label for="SecondaryInstituteBoard">Institute/Board</label>
+                        <input type="text" id="SecondaryInstituteBoard" name="SecondaryInstituteBoard" value="@Model.SecondaryInstituteBoard" required />
+                    </div>
+                </div>
+
+                <div class="cf-row">
+                    <div class="cf-field">
+                        <label for="HigherSecondaryEducation">Higher Secondary Education</label>
+                        <select id="HigherSecondaryEducation" name="HigherSecondaryEducation" required>
+                            <option value="">Select Qualification</option>
+                            <option>A Grade / 1st Division</option>
+                            <option>B Grade / 2nd Division</option>
+                            <option>C Grade / 3rd Division</option>
+                        </select>
+                    </div>
+                    <div class="cf-field">
+                        <label for="HigherSecondaryInstituteBoard">Institute/Board</label>
+                        <input type="text" id="HigherSecondaryInstituteBoard" name="HigherSecondaryInstituteBoard" value="@Model.HigherSecondaryInstituteBoard" required />
+                    </div>
+                </div>
+
+                <div class="cf-row">
+                    <div class="cf-field">
+                        <label for="Bachelors">Bachelors</label>
+                        <select id="Bachelors" name="Bachelors" required>
+                            <option value="">Select Qualification</option>
+                            <option>Bachelor's (14 years)</option>
+                            <option>Bachelor's (16 years)</option>
+                        </select>
+                    </div>
+                    <div class="cf-field">
+                        <label for="BachelorsInstituteBoard">Institute/Board</label>
+                        <input type="text" id="BachelorsInstituteBoard" name="BachelorsInstituteBoard" value="@Model.BachelorsInstituteBoard" required />
+                    </div>
+                </div>
+
+                <!-- Masters is the one exception the supervisor called out —
+                     not everyone has a Master's degree, so this stays optional -->
+                <div class="cf-row">
+                    <div class="cf-field">
+                        <label for="Masters">Masters (Optional)</label>
+                        <select id="Masters" name="Masters">
+                            <option value="">- Select Qualification -</option>
+                            <option>Master's</option>
+                            <option>MPhil</option>
+                            <option>PhD</option>
+                        </select>
+                    </div>
+                    <div class="cf-field">
+                        <label for="MastersInstituteBoard">Institute/Board (Optional)</label>
+                        <input type="text" id="MastersInstituteBoard" name="MastersInstituteBoard" value="@Model.MastersInstituteBoard" />
+                    </div>
+                </div>
+
+                <div class="cf-row">
+                    <div class="cf-field">
+                        <label for="OtherQualification">Other / Professional Qualification, Last Institute CGPA / Percentage</label>
+                        <textarea id="OtherQualification" name="OtherQualification" required>@Model.OtherQualification</textarea>
+                    </div>
+                    <div class="cf-field">
+                        <label for="OtherQualificationInstituteBoard">Institute/Board</label>
+                        <textarea id="OtherQualificationInstituteBoard" name="OtherQualificationInstituteBoard" required>@Model.OtherQualificationInstituteBoard</textarea>
+                    </div>
+                </div>
+
+                <div class="cf-field cf-full">
+                    <label for="TotalExperienceYears">Total Experience in years</label>
+                    <input type="text" id="TotalExperienceYears" name="TotalExperienceYears" value="@Model.TotalExperienceYears" required />
+                </div>
+
+                <div class="cf-row">
+                    <div class="cf-field">
+                        <label for="CurrentOrganization">Current Organization</label>
+                        <input type="text" id="CurrentOrganization" name="CurrentOrganization" value="@Model.CurrentOrganization" required />
+                    </div>
+                    <div class="cf-field">
+                        <label for="CurrentDesignation">Current Designation</label>
+                        <input type="text" id="CurrentDesignation" name="CurrentDesignation" value="@Model.CurrentDesignation" required />
+                    </div>
+                </div>
+
+                <div class="cf-row">
+                    <div class="cf-field">
+                        <label for="BankingExperienceYears">Banking Experience in Years</label>
+                        <input type="text" id="BankingExperienceYears" name="BankingExperienceYears" value="@Model.BankingExperienceYears" required />
+                    </div>
+                    <div class="cf-field">
+                        <label for="RelativeInSindhBank">Any Relative In Sindh Bank</label>
+                        <input type="text" id="RelativeInSindhBank" name="RelativeInSindhBank" value="@Model.RelativeInSindhBank" required />
+                    </div>
+                </div>
+
+                <div class="cf-row">
+                    <div class="cf-field">
+                        <label for="PreviouslyEmployeeOfSindhBank">Have you been previously employee of Sindh Bank</label>
+                        <select id="PreviouslyEmployeeOfSindhBank" name="PreviouslyEmployeeOfSindhBank" required>
+                            <option value="">Select</option>
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </div>
+                    <div class="cf-field">
+                        <label for="Disability">Disability</label>
+                        <select id="Disability" name="Disability">
+                            <option selected>No</option>
+                            <option>Yes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Hidden/collapsed by default (Disability = No). JS below
+                     shows it with a slide animation and marks the two
+                     inputs required only when Disability = Yes, so they
+                     never block submission while hidden. -->
+                <div class="cf-row cf-slide-wrapper" id="disabilityDetailsWrapper">
+                    <div class="cf-field">
+                        <label for="DisabilityType">Disability Type</label>
+                        <input type="text" id="DisabilityType" name="DisabilityType" value="@Model.DisabilityType" placeholder="e.g. Visual, Hearing, Mobility" />
+                    </div>
+                    <div class="cf-field">
+                        <label for="DisabilityDescription">Disability Description</label>
+                        <textarea id="DisabilityDescription" name="DisabilityDescription">@Model.DisabilityDescription</textarea>
+                    </div>
+                </div>
+
+                <div class="cf-field cf-full cf-submit-row">
+                    <button type="submit" id="cfSubmitBtn" disabled>Submit</button>
+                    <p class="cf-note">After submission of above form, a confirmation email will be received by the applicant informing application reference number.</p>
+                </div>
+            </form>
+
+            <script>
+                        (function() {
+                            var careerForm = document.getElementById('careerForm');
+                            var submitButton = document.getElementById('cfSubmitBtn');
+                            var disabilitySelect = document.getElementById('Disability');
+                            var disabilityWrapper = document.getElementById('disabilityDetailsWrapper');
+                            var disabilityTypeInput = document.getElementById('DisabilityType');
+                            var disabilityDescInput = document.getElementById('DisabilityDescription');
+
+                            // Runs on every keystroke/selection change across the
+                            // whole form. checkValidity() is a built-in browser
+                            // method that returns false if ANY required field is
+                            // currently empty/invalid — exactly what we need to
+                            // decide whether Submit should be clickable.
+                            function updateSubmitButtonState() {
+                                submitButton.disabled = !careerForm.checkValidity();
+                            }
+
+                            // Shows/hides the Disability Type + Description fields
+                            // with a slide animation, and toggles their `required`
+                            // attribute so they only count toward validation while
+                            // actually visible on screen.
+                            function updateDisabilityFields() {
+                                var isYes = disabilitySelect.value === 'Yes';
+
+                                if (isYes) {
+                                    disabilityWrapper.classList.add('cf-slide-open');
+                                    disabilityTypeInput.setAttribute('required', 'required');
+                                    disabilityDescInput.setAttribute('required', 'required');
+                                } else {
+                                    disabilityWrapper.classList.remove('cf-slide-open');
+                                    disabilityTypeInput.removeAttribute('required');
+                                    disabilityDescInput.removeAttribute('required');
+                                    disabilityTypeInput.value = '';
+                                    disabilityDescInput.value = '';
+                                }
+
+                                updateSubmitButtonState();
+                            }
+
+                            disabilitySelect.addEventListener('change', updateDisabilityFields);
+                            careerForm.addEventListener('input', updateSubmitButtonState);
+                            careerForm.addEventListener('change', updateSubmitButtonState);
+
+                            // ---- Existing Position/Location dynamic dropdown logic ----
+                            var positionSelect = document.getElementById('PositionAppliedFor');
+                            var locationSelect = document.getElementById('JobLocation');
+                            var postingsByPosition = {};
+
+                            fetch('/Career/GetActiveJobPostings')
+                                .then(function(res) { return res.json(); })
+                                .then(function(postings) {
+                                    postingsByPosition = {};
+                                    postings.forEach(function(p) {
+                                        if (!postingsByPosition[p.position]) {
+                                            postingsByPosition[p.position] = [];
+                                        }
+                                        if (postingsByPosition[p.position].indexOf(p.location) === -1) {
+                                            postingsByPosition[p.position].push(p.location);
+                                        }
+                                    });
+
+                                    positionSelect.innerHTML = '<option value="">Select Position</option>';
+                                    Object.keys(postingsByPosition).sort().forEach(function(position) {
+                                        var opt = document.createElement('option');
+                                        opt.value = position;
+                                        opt.textContent = position;
+                                        positionSelect.appendChild(opt);
+                                    });
+
+                                    var previouslySelected = positionSelect.getAttribute('data-selected');
+                                    if (previouslySelected && postingsByPosition[previouslySelected]) {
+                                        positionSelect.value = previouslySelected;
+                                        populateLocations(previouslySelected);
+                                    } else if (Object.keys(postingsByPosition).length === 0) {
+                                        positionSelect.innerHTML = '<option value="">No positions currently open</option>';
+                                    }
+
+                                    updateSubmitButtonState();
+                                })
+                                .catch(function() {
+                                    positionSelect.innerHTML = '<option value="">Unable to load positions</option>';
+                                });
+
+                            function populateLocations(position) {
+                                var locations = postingsByPosition[position] || [];
+                                locationSelect.innerHTML = '<option value="">Select Location</option>';
+                                locations.forEach(function(loc) {
+                                    var opt = document.createElement('option');
+                                    opt.value = loc;
+                                    opt.textContent = loc;
+                                    locationSelect.appendChild(opt);
+                                });
+
+                                var previouslySelectedLocation = locationSelect.getAttribute('data-selected');
+                                if (previouslySelectedLocation && locations.indexOf(previouslySelectedLocation) !== -1) {
+                                    locationSelect.value = previouslySelectedLocation;
+                                }
+
+                                updateSubmitButtonState();
+                            }
+
+                            positionSelect.addEventListener('change', function() {
+                                populateLocations(this.value);
+                            });
+
+                            // Set the correct initial state as soon as the page loads
+                            updateDisabilityFields();
+                        })();
+            </script>
+        }
+    </div>
+</div>

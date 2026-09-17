@@ -1,0 +1,38 @@
+﻿@model LoginViewModel
+@{
+    ViewData["Title"] = "HR Login";
+    Layout = "_PortalLayout";
+}
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+<div class="portal-card portal-login-card">
+    <h2>HR Portal Login</h2>
+    <p class="portal-subtitle">Sindh Bank — Career Form Management</p>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="portal-error">@Html.ValidationSummary(false)</div>
+    }
+
+    <form asp-controller="Account" asp-action="Login" method="post" class="portal-form">
+        @Html.AntiForgeryToken()
+        <div class="portal-field">
+            <label for="Email">Email</label>
+            <input type="email" id="Email" name="Email" value="@Model.Email" autocomplete="username" />
+        </div>
+        <div class="portal-field">
+            <label for="Password">Password</label>
+            <input type="password" id="Password" name="Password" autocomplete="current-password" />
+        </div>
+
+        <!-- The g-recaptcha-response hidden field is added automatically
+             by Google's script once the user completes the checkbox —
+             we don't need to create it ourselves. -->
+        <div class="portal-field">
+            <div class="g-recaptcha" data-sitekey="@ViewBag.RecaptchaSiteKey"></div>
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+</div>
